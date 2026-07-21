@@ -1,0 +1,39 @@
+# --- Node / learning app ---
+node_modules/
+dist/
+*.local
+
+# --- Python (portfolio projects) ---
+.venv/
+venv/
+__pycache__/
+*.pyc
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+
+# --- Data: never commit datasets (repo lives in OneDrive; use download scripts) ---
+data/
+*.duckdb
+*.duckdb.wal
+*.parquet
+*.avro
+*.orc
+
+# --- Secrets / env ---
+.env
+.env.*
+!.env.example
+
+# --- Logs ---
+logs/
+*.log
+
+# --- Claude worktrees (borrowed checkouts, never repo content) ---
+**/.claude/worktrees/
+
+# --- OS / editor ---
+Thumbs.db
+.DS_Store
+.vscode/*
+!.vscode/extensions.json
