@@ -106,4 +106,221 @@ export const glossary: Record<string, GlossaryEntry> = {
     definition:
       'The declared shape of data: column names, types, and constraints. Schemas are contracts between producers and consumers of data.',
   },
+  // --- added with Phase 1 ---
+  repl: {
+    term: 'REPL',
+    definition:
+      'The read-eval-print loop — Python’s interactive prompt (started with uv run python) where each typed expression is evaluated immediately; the standard place to test small ideas before committing them to a script.',
+  },
+  traceback: {
+    term: 'Traceback',
+    definition:
+      'Python’s crash report: the exception type and message on the last line, preceded by the chain of calls that led there. Read bottom-up, then find the nearest frame in your own code.',
+  },
+  exception: {
+    term: 'Exception',
+    definition:
+      'An object raised when an operation cannot proceed (KeyError, ValueError, TypeError…). In pipelines, exception types are diagnoses of data problems; catch them narrowly or crash loudly.',
+  },
+  generator: {
+    term: 'Generator',
+    definition:
+      'A lazily-evaluated producer of values (a function containing yield, or a parenthesized comprehension) that computes one item per next() call in constant memory; single-pass — once exhausted it yields nothing more.',
+  },
+  'lazy-evaluation': {
+    term: 'Lazy evaluation',
+    definition:
+      'Deferring computation until a result is actually demanded, so data streams item-by-item instead of materializing in memory — the idea shared by Python generators, query executors, and Spark’s deferred execution.',
+  },
+  encoding: {
+    term: 'Encoding',
+    definition:
+      'The mapping between text characters and bytes (utf-8, cp1252). Every file read needs the right one declared; mismatches cause silent mojibake or loud decode errors.',
+  },
+  mojibake: {
+    term: 'Mojibake',
+    definition:
+      'Garbled text (Ã© instead of é) produced when bytes written in one encoding are decoded with another — silent corruption, unlike a UnicodeDecodeError.',
+  },
+  'json-lines': {
+    term: 'JSON Lines',
+    definition:
+      'A text format with one complete JSON object per line (.jsonl/ndjson). Streamable, appendable, and splittable — the default landing format between pipeline stages.',
+  },
+  'http-api': {
+    term: 'HTTP API',
+    definition:
+      'A service exposing data over HTTP endpoints, usually returning JSON. The front door through which most third-party data enters a pipeline.',
+  },
+  'rate-limit': {
+    term: 'Rate limit',
+    definition:
+      'A server-enforced cap on request frequency; exceeding it returns HTTP 429, telling the client to back off before retrying.',
+  },
+  'exponential-backoff': {
+    term: 'Exponential backoff',
+    definition:
+      'A retry strategy that doubles the wait after each failure, combined with random jitter so synchronized clients desynchronize instead of hammering a recovering server together.',
+  },
+  utc: {
+    term: 'UTC',
+    definition:
+      'Coordinated Universal Time — the DST-free reference clock. Pipeline discipline: convert to UTC at ingestion, compute in UTC, convert to local time only for display.',
+  },
+  'iso-8601': {
+    term: 'ISO 8601',
+    definition:
+      'The standard text format for dates and times (2026-07-04T12:00:00+00:00): biggest unit first, offset at the end, sorts correctly as plain text.',
+  },
+  dst: {
+    term: 'DST',
+    definition:
+      'Daylight saving time — twice-yearly clock shifts that make one local hour occur twice and another never; the reason local-time data needs zone rulebooks, not fixed offsets.',
+  },
+  dataframe: {
+    term: 'DataFrame',
+    definition:
+      'An in-memory table of named, typed columns (pandas, polars) enabling whole-column vectorized operations instead of per-row loops — at the cost of fitting in RAM.',
+  },
+  vectorization: {
+    term: 'Vectorization',
+    definition:
+      'Executing one operation over a whole typed buffer in compiled code (cache- and SIMD-friendly) rather than an interpreted per-element loop; the source of DataFrame and DuckDB speed.',
+  },
+  'apache-arrow': {
+    term: 'Apache Arrow',
+    definition:
+      'A standardized columnar in-memory format that lets engines (polars, DuckDB, Spark, pandas) hand tables to each other without copies or serialization.',
+  },
+  cte: {
+    term: 'CTE',
+    definition:
+      'A Common Table Expression — a subquery named with WITH at the top of a SQL statement, usable like a table; chains of CTEs structure complex queries as readable, top-down pipelines.',
+  },
+  'window-function': {
+    term: 'Window function',
+    definition:
+      'A SQL function that computes a value for each row over a set of related rows (its window) — ranks, neighbors, running aggregates — without collapsing rows the way GROUP BY does.',
+  },
+  'window-frame': {
+    term: 'Window frame',
+    definition:
+      'The subrange of an ordered window partition an aggregate sees for the current row (e.g. ROWS BETWEEN 6 PRECEDING AND CURRENT ROW) — the mechanism behind running totals and moving averages.',
+  },
+  'set-operation': {
+    term: 'Set operation',
+    definition:
+      'An operator combining whole result sets — UNION, UNION ALL, INTERSECT, EXCEPT — matching columns by position; UNION additionally deduplicates entire rows at sort/hash cost.',
+  },
+  pivot: {
+    term: 'Pivot',
+    definition:
+      'Rotating a long table (one row per fact) into a wide grid (one column per category), via conditional aggregation or engine-specific PIVOT syntax; unpivot is the reverse.',
+  },
+  linter: {
+    term: 'Linter',
+    definition:
+      'A tool that parses code and mechanically flags rule violations (style and bug-prone patterns); sqlfluff is the standard SQL linter, oxlint/ruff serve JS and Python.',
+  },
+  'environment-variable': {
+    term: 'Environment variable',
+    definition:
+      'A key-value string the operating system hands to every process it starts; the standard channel for per-machine and per-deploy configuration and secrets, read in Python via os.environ.',
+  },
+  cli: {
+    term: 'CLI',
+    definition:
+      'Command-line interface — a program’s typed contract of subcommands, flags, and exit codes that lets humans and schedulers drive it without editing code.',
+  },
+  'exit-code': {
+    term: 'Exit code',
+    definition:
+      'The integer a process returns on termination (0 = success, non-zero = failure); the machine-readable signal schedulers, CI, and shells use to decide what happens next.',
+  },
+  cron: {
+    term: 'cron',
+    definition:
+      'The Unix time-based job scheduler and its five-field expression syntax (minute hour day-of-month month day-of-week), reused by virtually every modern scheduler and orchestrator.',
+  },
+  // --- added with Phase 2 ---
+  transaction: {
+    term: 'Transaction',
+    definition:
+      'A group of database statements that either all take effect (COMMIT) or none do (ROLLBACK) — the unit of atomicity, and the boundary at which constraints and durability are guaranteed.',
+  },
+  acid: {
+    term: 'ACID',
+    definition:
+      'Atomicity, Consistency, Isolation, Durability — the four guarantees a transactional database makes about committed work.',
+  },
+  wal: {
+    term: 'WAL',
+    definition:
+      'Write-ahead log — the append-only journal a database flushes to disk before COMMIT returns; crash recovery replays it, so durability lives in the log rather than the data files.',
+  },
+  mvcc: {
+    term: 'MVCC',
+    definition:
+      'Multi-version concurrency control — updates write new row versions instead of overwriting, and each transaction reads through a snapshot, so readers never block writers.',
+  },
+  'isolation-level': {
+    term: 'Isolation level',
+    definition:
+      'The per-transaction setting (in Postgres: Read Committed, Repeatable Read, Serializable) controlling which concurrency anomalies a transaction can observe.',
+  },
+  constraint: {
+    term: 'Constraint',
+    definition:
+      'A schema rule (NOT NULL, PRIMARY KEY, UNIQUE, CHECK, FOREIGN KEY) the engine enforces on every write path — validation that never sleeps.',
+  },
+  vacuum: {
+    term: 'VACUUM',
+    definition:
+      'Postgres maintenance that reclaims dead tuples left behind by MVCC updates and deletes; autovacuum runs it automatically.',
+  },
+  'connection-pooling': {
+    term: 'Connection pooling',
+    definition:
+      'Reusing a small set of long-lived database connections across many clients — needed because Postgres forks an OS process per connection.',
+  },
+  parquet: {
+    term: 'Parquet',
+    definition:
+      'Open columnar file format for analytics — data stored in row groups of column chunks, with schema, offsets, and min/max statistics embedded in a footer that readers consult before fetching any data.',
+  },
+  avro: {
+    term: 'Avro',
+    definition:
+      'Row-oriented binary file format with the schema embedded and formal evolution rules (reader vs writer schema resolution); the standard serialization for streaming pipelines such as Kafka.',
+  },
+  'row-group': {
+    term: 'Row group',
+    definition:
+      'A horizontal slice of a Parquet file holding a contiguous batch of rows for all columns; the unit of parallelism and of statistics-based skipping.',
+  },
+  'predicate-pushdown': {
+    term: 'Predicate pushdown',
+    definition:
+      'Evaluating a query filter against file/block metadata (e.g. min/max statistics) so blocks that provably cannot match are skipped without being read.',
+  },
+  'partition-pruning': {
+    term: 'Partition pruning',
+    definition:
+      'Eliminating whole partitions (directories of files) at query-planning time based on partition-key values encoded in storage paths, before any file is opened.',
+  },
+  'schema-on-read': {
+    term: 'Schema-on-read',
+    definition:
+      'Storing untyped bytes (CSV, JSONL) and applying types at query time — every reader re-interprets the data, so malformed values surface late or silently vanish.',
+  },
+  compaction: {
+    term: 'Compaction',
+    definition:
+      'Periodically rewriting many small files into fewer large ones (often re-sorting in the same pass) to restore healthy file sizes and statistics-based skipping in a data lake.',
+  },
+  'small-files-problem': {
+    term: 'Small-files problem',
+    definition:
+      'Collapse of scan throughput when a dataset is split across huge numbers of tiny files, because per-file fixed costs (listing, opens, footer reads, planning) dominate actual data reading.',
+  },
 }
