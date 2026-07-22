@@ -76,6 +76,11 @@ export const lessonComponents: Record<string, LazyExoticComponent<ComponentType>
   '3.4.3': lazy(() => import('./phase-3/module-04/03-partitions-backfills')),
   '3.4.4': lazy(() => import('./phase-3/module-04/04-retries-resources-run-config')),
   '3.5.1': lazy(() => import('./phase-3/module-05/01-same-pipeline-in-airflow')),
+  '3.6.1': lazy(() => import('./phase-3/module-06/01-models-and-refs')),
+  '3.6.2': lazy(() => import('./phase-3/module-06/02-materializations')),
+  '3.6.3': lazy(() => import('./phase-3/module-06/03-tests-sources-docs')),
+  '3.6.4': lazy(() => import('./phase-3/module-06/04-snapshots-scd2')),
+  '3.6.5': lazy(() => import('./phase-3/module-06/05-project-structure')),
   '3.7.1': lazy(() => import('./phase-3/module-07/01-data-quality-strategies')),
   '3.7.2': lazy(() => import('./phase-3/module-07/02-ci-for-data-projects')),
 }

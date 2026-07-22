@@ -597,7 +597,7 @@ export const glossary: Record<string, GlossaryEntry> = {
   materialization: {
     term: 'Materialization',
     definition:
-      'The act (and recorded event) of computing an asset and persisting its value; an orchestrator logs each one with a timestamp and metadata, forming the asset\'s history.',
+      'Computing a transformation\'s result and persisting it. In an orchestrator like Dagster, the recorded event of building an asset (logged with timestamp and metadata, forming its history). In dbt, the config for HOW a model\'s SELECT is persisted — view, table, incremental, or ephemeral.',
   },
   'data-lineage': {
     term: 'Data lineage',
@@ -733,5 +733,61 @@ export const glossary: Record<string, GlossaryEntry> = {
   sqlfluff: {
     term: 'SQLFluff',
     definition: 'A SQL linter that parses SQL and flags style and rule violations, exiting non-zero on a problem — the SQL analogue of a code linter, runnable in CI.',
+  },
+  dbt: {
+    term: 'dbt',
+    definition:
+      'A SQL-first transformation framework (the T in ELT) where each model is a SELECT file. It compiles Jinja-templated SQL, builds a dependency DAG from ref(), and runs models in order against a warehouse.',
+  },
+  'dbt-model': {
+    term: 'dbt model',
+    definition: 'One .sql file containing a single SELECT; dbt wraps it in whatever DDL its materialization needs (a view, a table, an incremental merge).',
+  },
+  'incremental-model': {
+    term: 'Incremental model',
+    definition:
+      'A dbt materialization that builds the model once, then on later runs merges only new or changed rows via a unique_key and an is_incremental() filter — the dbt form of an incremental load.',
+  },
+  'ephemeral-model': {
+    term: 'Ephemeral model',
+    definition: 'A dbt model that produces no database object; dbt inlines its SELECT as a CTE into each model that references it.',
+  },
+  'dbt-source': {
+    term: 'dbt source',
+    definition: 'A YAML declaration of a raw input table, referenced in models with source(); it can carry schema tests and freshness monitoring.',
+  },
+  'schema-test': {
+    term: 'Schema test',
+    definition: 'A generic, reusable dbt test attached to a column in YAML (unique, not_null, accepted_values, relationships) — a data-quality assertion as configuration.',
+  },
+  'singular-test': {
+    term: 'Singular test',
+    definition: 'A one-off dbt test written as a .sql file that hand-writes a "return the violating rows" query; it passes when the query returns zero rows.',
+  },
+  'dbt-snapshot': {
+    term: 'dbt snapshot',
+    definition: 'dbt\'s built-in SCD2 materialization: run repeatedly, it captures how a source row changes over time into validity-windowed history rows.',
+  },
+  scd2: {
+    term: 'SCD Type 2',
+    definition:
+      'Slowly Changing Dimension Type 2 — preserve history by expiring the old version of a row (setting its valid_to) and inserting a new current version, rather than overwriting. Taught in lesson 2.4.3; automated by dbt snapshots.',
+  },
+  'staging-model': {
+    term: 'Staging model',
+    definition: 'The stg_ layer in a dbt project: 1:1 with a source, light cleaning/renaming/typing only, and the only layer that references sources directly.',
+  },
+  'intermediate-model': {
+    term: 'Intermediate model',
+    definition: 'The int_ layer holding reusable joins and business logic shared by several marts — often materialized ephemerally.',
+  },
+  mart: {
+    term: 'Mart',
+    definition: 'The business-facing fct_/dim_ layer of a dbt project — Kimball facts and dimensions at an explicit grain, built from staging and intermediate models.',
+  },
+  medallion: {
+    term: 'Medallion',
+    definition:
+      'Shorthand for the medallion architecture: the bronze (raw) / silver (cleaned) / gold (business-ready) layering of a data lake, each layer rebuilt from the one below.',
   },
 }
