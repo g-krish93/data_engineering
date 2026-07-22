@@ -325,13 +325,13 @@ def clean(lines: list[str]) -> tuple[list[WeatherRecord], int]:
                 <p>
                   In <code>cli.py</code>, temporarily replace <code>lines = load_raw()</code> with{' '}
                   <code>lines = "BER,2024-01-01,7.5"</code>. A string is iterable, so <code>clean</code> will
-                  "work" — on the seventeen individual characters:
+                  "work" — on the eighteen individual characters:
                 </p>
               ),
               commands: [{ ps: 'uv run clean' }],
               checkpoint: (
                 <>
-                  It prints <code>kept 0 of 17 lines (17 rejected)</code>. No crash, wrong everything — precisely
+                  It prints <code>kept 0 of 18 lines (18 rejected)</code>. No crash, wrong everything — precisely
                   the failure mode checkers exist for.
                 </>
               ),
