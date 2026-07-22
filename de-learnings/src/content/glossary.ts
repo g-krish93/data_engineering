@@ -676,4 +676,62 @@ export const glossary: Record<string, GlossaryEntry> = {
     definition:
       'Airflow\'s "cross-communication" mechanism for passing a small value between tasks via the metadata database — for row counts and paths, never large datasets.',
   },
+  'data-quality': {
+    term: 'Data quality',
+    definition:
+      'The practice of asserting measurable properties of data — not just that the job ran. A check is a query returning rule-violating rows; zero rows means the rule holds.',
+  },
+  observability: {
+    term: 'Data observability',
+    definition:
+      'Continuous, out-of-band measurement of data metrics (row counts, null rates, freshness lag) with anomaly detection and alerting — it preserves delivery but detects problems after the fact, in contrast to a blocking test.',
+  },
+  'data-contract': {
+    term: 'Data contract',
+    definition:
+      'A machine-checkable, owned agreement listing a dataset\'s guaranteed invariants (which properties are blocked and versioned versus best-effort and monitored).',
+  },
+  freshness: {
+    term: 'Freshness',
+    definition:
+      'The timeliness dimension of data quality — how far behind "now" the newest accepted row is. It fails when the lag exceeds an SLA, even though every value is valid.',
+  },
+  sla: {
+    term: 'SLA',
+    definition:
+      'Service-level agreement — the agreed limit a dataset must meet (e.g. maximum staleness, or a delivery deadline).',
+  },
+  quarantine: {
+    term: 'Quarantine',
+    definition:
+      'Routing rule-violating rows to a dead-letter table so clean rows keep flowing — partial delivery now, replay the quarantined rows after a fix.',
+  },
+  'continuous-integration': {
+    term: 'Continuous integration (CI)',
+    definition:
+      'Automatically building and testing every change against the shared codebase before merge, in a clean reproducible environment — for data, running dbt build + tests on each pull request.',
+  },
+  'branch-protection': {
+    term: 'Branch protection',
+    definition: 'A repository rule requiring a CI check to pass before a pull request can merge to a protected branch like main.',
+  },
+  'slim-ci': {
+    term: 'Slim CI',
+    definition:
+      'Building only the changed models and their downstream dependents (dbt state:modified+) against a saved manifest, so CI time scales with the change rather than the whole project.',
+  },
+  defer: {
+    term: 'Defer (dbt)',
+    definition:
+      'dbt --defer references unchanged upstream models from a production environment instead of rebuilding them in CI — the other half of slim CI.',
+  },
+  'ephemeral-environment': {
+    term: 'Ephemeral environment',
+    definition:
+      'A throwaway, per-run schema/warehouse (or DuckDB file) created and dropped for each CI run, so tests are isolated and leave no residue.',
+  },
+  sqlfluff: {
+    term: 'SQLFluff',
+    definition: 'A SQL linter that parses SQL and flags style and rule violations, exiting non-zero on a problem — the SQL analogue of a code linter, runnable in CI.',
+  },
 }
