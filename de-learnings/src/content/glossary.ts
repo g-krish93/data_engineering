@@ -433,4 +433,247 @@ export const glossary: Record<string, GlossaryEntry> = {
     definition:
       'A multi-host container orchestrator providing scheduling, self-healing rescheduling, rolling deploys, and autoscaling across a cluster of machines — the production step beyond single-host Compose.',
   },
+  'batch-processing': {
+    term: 'Batch processing',
+    definition:
+      'Processing a complete, bounded chunk of data in one pass, usually on a schedule. High throughput, high latency — the classic ETL cadence.',
+  },
+  'micro-batch': {
+    term: 'Micro-batch',
+    definition:
+      'A stream sliced into a sequence of small bounded batches processed on a short interval — a tunable middle ground between batch and true streaming.',
+  },
+  'stream-processing': {
+    term: 'Stream processing',
+    definition:
+      'Processing each event as it arrives over unbounded data, for the lowest latency and the highest complexity.',
+  },
+  'bounded-data': {
+    term: 'Bounded data',
+    definition:
+      'A finite, complete dataset you can see in full before computing a result — the natural input to batch processing.',
+  },
+  'unbounded-data': {
+    term: 'Unbounded data',
+    definition:
+      'A never-ending stream with no end at which to compute a final answer, so aggregates must be computed over windows.',
+  },
+  latency: {
+    term: 'Latency',
+    definition:
+      'How stale a pipeline\'s output is — the delay between an event happening and its effect appearing downstream. Traded against throughput and cost.',
+  },
+  throughput: {
+    term: 'Throughput',
+    definition: 'The volume of records a pipeline processes per unit time.',
+  },
+  watermark: {
+    term: 'Watermark',
+    definition:
+      'A moving marker asserting "every event up to here has been seen" — the maximum high-water-mark value already processed. Incremental loads advance it each run; late data arrives behind it.',
+  },
+  'incremental-load': {
+    term: 'Incremental load',
+    definition:
+      'Loading only the rows changed since last time (cost scales with change volume, not table size), using a high-water-mark column plus an upsert.',
+  },
+  'high-water-mark': {
+    term: 'High-water mark',
+    definition:
+      'The source column that only increases as rows change (e.g. updated_at or a monotonic id), used to select the delta since the last load.',
+  },
+  upsert: {
+    term: 'Upsert',
+    definition:
+      'A write that updates a row when its key already exists and inserts it otherwise (MERGE, or INSERT ... ON CONFLICT DO UPDATE). Idempotent per key.',
+  },
+  backfill: {
+    term: 'Backfill',
+    definition:
+      'Reprocessing a past date range — to fix a bug, fill a gap, or apply new logic to history. Safe to repeat when each partition load is idempotent.',
+  },
+  'late-data': {
+    term: 'Late data',
+    definition:
+      'An event whose event-time is already behind the watermark when it arrives, so the window it belongs to may have closed. Handled by dropping, dead-lettering, or restating.',
+  },
+  'allowed-lateness': {
+    term: 'Allowed lateness',
+    definition:
+      'A grace window past the watermark during which a straggler event can still update a window\'s result before its state is discarded.',
+  },
+  'dead-letter': {
+    term: 'Dead letter',
+    definition:
+      'A side table or queue for records that cannot be processed (bad types, validation failures, poison messages), tagged with a reason so the main flow keeps moving.',
+  },
+  'poison-message': {
+    term: 'Poison message',
+    definition:
+      'A record that repeatedly fails processing (e.g. a deserialization or type error) and can stall a consumer if it is not routed to a dead-letter store.',
+  },
+  restatement: {
+    term: 'Restatement',
+    definition:
+      'A backfill that recomputes and republishes already-published results to fold in corrections or late-arriving data.',
+  },
+  'change-data-capture': {
+    term: 'Change data capture (CDC)',
+    definition:
+      'Capturing row-level inserts, updates, and deletes from a source database as a stream of change events — via the transaction log (log-based), polling a timestamp (query-based), or database triggers.',
+  },
+  'logical-decoding': {
+    term: 'Logical decoding',
+    definition:
+      'Translating a database\'s physical write-ahead-log entries back into logical row changes (operation plus before/after images) in commit order — the basis of log-based CDC.',
+  },
+  'replication-slot': {
+    term: 'Replication slot',
+    definition:
+      'A durable cursor in Postgres tracking a CDC consumer\'s position; it pins WAL until changes are acknowledged, so a stalled consumer can grow WAL without bound.',
+  },
+  tombstone: {
+    term: 'Tombstone',
+    definition:
+      'A delete marker in a change stream or compacted log (often a key with a null value) that signals removal and lets physical cleanup proceed.',
+  },
+  prefix: {
+    term: 'Prefix (object storage)',
+    definition:
+      'The leading portion of an object key up to a delimiter. Consoles render prefixes as "folders", but the namespace is actually flat — there are no real directories.',
+  },
+  'strong-consistency': {
+    term: 'Strong consistency',
+    definition:
+      'A read immediately after a write always returns the latest value. Modern S3 and MinIO guarantee it for object operations.',
+  },
+  'eventual-consistency': {
+    term: 'Eventual consistency',
+    definition:
+      'After a write, reads may briefly return stale data or miss the object before converging — S3\'s pre-2020 behavior, still a hazard in some distributed stores.',
+  },
+  minio: {
+    term: 'MinIO',
+    definition:
+      'An open-source, S3-compatible object store you can run locally (in Docker) — your data lake and S3 API without a cloud account, ideal for dev and CI parity.',
+  },
+  's3-api': {
+    term: 'S3 API',
+    definition:
+      'The HTTP REST interface (buckets and keys, PUT/GET/LIST, multipart upload, SigV4 auth) that S3 defines and compatible stores like MinIO implement.',
+  },
+  httpfs: {
+    term: 'httpfs',
+    definition:
+      'A DuckDB extension for reading and writing over HTTP and S3-compatible object stores via s3:// URLs.',
+  },
+  'medallion-architecture': {
+    term: 'Medallion architecture',
+    definition:
+      'A data-lake convention of bronze (raw), silver (cleaned/conformed), and gold (business marts) layers, each rebuilt from the one below so you can always replay from raw.',
+  },
+  'bronze-layer': {
+    term: 'Bronze layer',
+    definition: 'The raw, as-ingested, append-only copy of source data — the replayable source of truth in a medallion lake.',
+  },
+  'silver-layer': {
+    term: 'Silver layer',
+    definition: 'Cleaned, typed, deduplicated, conformed data — one row per real entity, built from bronze.',
+  },
+  'gold-layer': {
+    term: 'Gold layer',
+    definition: 'Business-level marts and aggregates shaped for the questions people actually ask, built from silver.',
+  },
+  'write-amplification': {
+    term: 'Write amplification',
+    definition:
+      'Storing or rewriting the same logical data multiple times (e.g. across bronze/silver/gold copies), multiplying storage and compute cost.',
+  },
+  'software-defined-asset': {
+    term: 'Software-defined asset',
+    definition:
+      'A persistent data object (a table or file) that Dagster manages, defined by the @asset function that produces it — the unit of an asset-centric orchestrator, as opposed to a task/op.',
+  },
+  materialization: {
+    term: 'Materialization',
+    definition:
+      'The act (and recorded event) of computing an asset and persisting its value; an orchestrator logs each one with a timestamp and metadata, forming the asset\'s history.',
+  },
+  'data-lineage': {
+    term: 'Data lineage',
+    definition:
+      'The recorded graph of what each dataset is built from (upstream) and what depends on it (downstream) — used for root-cause and impact analysis.',
+  },
+  'freshness-policy': {
+    term: 'Freshness policy',
+    definition:
+      'A declared staleness bound on an asset ("no more than an hour old") from which the orchestrator derives when to run, instead of a hand-pinned schedule.',
+  },
+  'dagster-job': {
+    term: 'Job (Dagster)',
+    definition: 'A named, runnable selection of assets (or ops) that schedules and sensors launch.',
+  },
+  schedule: {
+    term: 'Schedule',
+    definition: 'A time-driven trigger that runs a job on a cron cadence, whether or not new data exists.',
+  },
+  sensor: {
+    term: 'Sensor',
+    definition: 'An event-driven trigger that polls a condition (a file landing, an asset materializing) and runs a job when it becomes true.',
+  },
+  'run-key': {
+    term: 'Run key',
+    definition:
+      'A string on a run request that the orchestrator deduplicates on, making triggering idempotent — no second run launches for a key that already ran.',
+  },
+  'partitioned-asset': {
+    term: 'Partitioned asset',
+    definition:
+      'A single logical asset divided along a key (commonly one partition per day) whose partitions are materialized and tracked independently.',
+  },
+  'dagster-resource': {
+    term: 'Resource (Dagster)',
+    definition:
+      'A pluggable external dependency (a database connection, an S3 client) the orchestrator constructs and injects into assets by parameter name — dependency injection, swappable per environment.',
+  },
+  airflow: {
+    term: 'Apache Airflow',
+    definition:
+      'The mature, ubiquitous open-source workflow orchestrator (from Airbnb, 2015; Apache since 2016). Task-centric and the de facto industry default.',
+  },
+  'airflow-dag': {
+    term: 'DAG (Airflow)',
+    definition:
+      'In Airflow, a Directed Acyclic Graph whose nodes are tasks (steps) and whose edges are dependencies you declare explicitly, plus a schedule.',
+  },
+  'airflow-operator': {
+    term: 'Operator (Airflow)',
+    definition:
+      'A reusable template for a task (PythonOperator, BashOperator, and hundreds more from provider packages); instantiating one creates a task node.',
+  },
+  'airflow-scheduler': {
+    term: 'Scheduler (Airflow)',
+    definition:
+      'The long-running Airflow process that parses DAG files and, from the clock and upstream task states, decides which task instances are ready to run.',
+  },
+  'airflow-executor': {
+    term: 'Executor (Airflow)',
+    definition:
+      'The pluggable strategy that actually runs ready task instances — LocalExecutor (subprocesses), or CeleryExecutor/KubernetesExecutor for distributed runs.',
+  },
+  'task-instance': {
+    term: 'Task instance',
+    definition:
+      'One Airflow task on one logical date, with its own state (queued, running, success, failed, up_for_retry) in the metadata database.',
+  },
+  'taskflow-api': {
+    term: 'TaskFlow API',
+    definition:
+      'The modern Airflow authoring style using @dag/@task decorators: dependencies are wired by calling task functions, and return values pass between tasks as XComs.',
+  },
+  xcom: {
+    term: 'XCom',
+    definition:
+      'Airflow\'s "cross-communication" mechanism for passing a small value between tasks via the metadata database — for row counts and paths, never large datasets.',
+  },
 }
