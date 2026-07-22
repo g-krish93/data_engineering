@@ -61,4 +61,6 @@ export const lessonComponents: Record<string, LazyExoticComponent<ComponentType>
   '2.5.3': lazy(() => import('./phase-2/module-05/03-partitioning-small-files')),
   // Phase 3 — Pipelines, Orchestration & the Data Lake
   '3.1.1': lazy(() => import('./phase-3/module-01/01-images-containers-layers')),
+  '3.1.2': lazy(() => import('./phase-3/module-01/02-writing-dockerfiles')),
+  '3.1.3': lazy(() => import('./phase-3/module-01/03-compose-networks-volumes-healthchecks')),
 }

@@ -368,4 +368,69 @@ export const glossary: Record<string, GlossaryEntry> = {
     definition:
       'A server that stores and serves container images (Docker Hub is the default public one; companies run private ones). docker pull downloads an image by registry/repository:tag; docker push publishes one. Layers are stored once per registry and deduplicated by digest.',
   },
+  dockerfile: {
+    term: 'Dockerfile',
+    definition:
+      'A plain-text file of ordered instructions (FROM, COPY, RUN, CMD, …) that Docker executes top-to-bottom to build an image, one layer per instruction.',
+  },
+  buildkit: {
+    term: 'BuildKit',
+    definition:
+      'The modern Docker build engine that compiles a Dockerfile into a build DAG — content-addressed caching, parallel execution of independent stages, cache mounts, and pruning of unused work.',
+  },
+  'build-context': {
+    term: 'Build context',
+    definition:
+      'The directory tree sent to the Docker builder when a build starts; COPY and ADD can only reference files inside it, so a bloated context slows builds and can leak secrets into images.',
+  },
+  dockerignore: {
+    term: '.dockerignore',
+    definition:
+      'A file of glob patterns excluded from the build context before it is sent to the builder — like .gitignore, but for image builds. Keeps contexts small and secrets out.',
+  },
+  'multi-stage-build': {
+    term: 'Multi-stage build',
+    definition:
+      'A Dockerfile with several FROM stages where a slim final stage copies only the built artifacts from a heavier builder stage, discarding compilers and build tooling to ship a small, safer image.',
+  },
+  'non-root-user': {
+    term: 'Non-root user',
+    definition:
+      'Running a container\'s main process as an unprivileged USER rather than root, shrinking the blast radius if the process is compromised or escapes.',
+  },
+  'docker-compose': {
+    term: 'Docker Compose',
+    definition:
+      'A tool that runs a multi-container application declared in a YAML file (services, one network, volumes) with a single up/down command — the standard way to wire local multi-service stacks.',
+  },
+  'compose-service': {
+    term: 'Compose service',
+    definition:
+      'A single container definition within a docker-compose.yml file — its image (or build), ports, environment, volumes, and dependencies.',
+  },
+  'service-discovery': {
+    term: 'Service discovery',
+    definition:
+      'Compose\'s shared network plus embedded DNS resolves each service name to its container\'s current IP, so services reach each other by name (e.g. an app connects to host "db") instead of a hardcoded address.',
+  },
+  'named-volume': {
+    term: 'Named volume',
+    definition:
+      'A Docker-managed persistent volume referenced by name that lives outside any container\'s writable layer and survives container removal — where stateful data (a database\'s files) belongs.',
+  },
+  'bind-mount': {
+    term: 'Bind mount',
+    definition:
+      'A mount mapping a specific host directory into a container so host and container share files live — used to inject dev code or config, in contrast to a Docker-managed named volume.',
+  },
+  healthcheck: {
+    term: 'Healthcheck',
+    definition:
+      'A command Docker runs on a schedule to report whether a container is actually ready (exit 0 = healthy). Lets dependents wait for readiness via depends_on: condition: service_healthy, unlike plain depends_on which only waits for start.',
+  },
+  kubernetes: {
+    term: 'Kubernetes',
+    definition:
+      'A multi-host container orchestrator providing scheduling, self-healing rescheduling, rolling deploys, and autoscaling across a cluster of machines — the production step beyond single-host Compose.',
+  },
 }
