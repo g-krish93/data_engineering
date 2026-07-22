@@ -48,6 +48,7 @@ const AUTHORED = new Set([
   '2.3.1', '2.3.2', '2.3.3', '2.3.4',
   '2.4.1', '2.4.2', '2.4.3', '2.4.4',
   '2.5.1', '2.5.2', '2.5.3',
+  '3.1.1',
 ])
 
 function l(id: string, title: string, minutes = 60, authored = false): LessonMeta {

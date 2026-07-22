@@ -343,4 +343,29 @@ export const glossary: Record<string, GlossaryEntry> = {
     definition:
       'A join that returns each row of one table where at least one match exists in another, without duplicating rows or adding the other table\'s columns. IN and EXISTS express it; unlike an inner join it never multiplies rows, making it the correct tool for existence tests.',
   },
+  'image-layer': {
+    term: 'Image layer',
+    definition:
+      'The read-only filesystem diff produced by a single image build step (the files it added, changed, or deleted). Layers are immutable and content-addressed by hash, so identical layers are stored once and shared across images and containers.',
+  },
+  'union-filesystem': {
+    term: 'Union filesystem',
+    definition:
+      'A filesystem (overlayfs on Linux) that merges a stack of layers into one coherent tree, with upper layers shadowing lower ones and whiteout markers recording deletions. It is how a container presents many read-only image layers plus its writable layer as a single directory tree.',
+  },
+  'base-image': {
+    term: 'Base image',
+    definition:
+      'The image named in a Dockerfile\'s FROM instruction — the bottom of the layer stack that everything else builds on (e.g. python:3.13-slim). Many images share one base, so its layers are downloaded and stored a single time.',
+  },
+  'copy-on-write': {
+    term: 'Copy-on-write',
+    definition:
+      'Sharing data until it is modified: a container reads files straight from the read-only image layers, but the first write to a file copies it up into the writable layer and edits the copy, leaving the underlying image untouched. Cheap to share, with a copy cost on first write.',
+  },
+  'container-registry': {
+    term: 'Container registry',
+    definition:
+      'A server that stores and serves container images (Docker Hub is the default public one; companies run private ones). docker pull downloads an image by registry/repository:tag; docker push publishes one. Layers are stored once per registry and deduplicated by digest.',
+  },
 }

@@ -59,4 +59,6 @@ export const lessonComponents: Record<string, LazyExoticComponent<ComponentType>
   '2.5.1': lazy(() => import('./phase-2/module-05/01-format-shootout')),
   '2.5.2': lazy(() => import('./phase-2/module-05/02-parquet-internals')),
   '2.5.3': lazy(() => import('./phase-2/module-05/03-partitioning-small-files')),
+  // Phase 3 — Pipelines, Orchestration & the Data Lake
+  '3.1.1': lazy(() => import('./phase-3/module-01/01-images-containers-layers')),
 }
