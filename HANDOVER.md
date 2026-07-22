@@ -25,26 +25,36 @@ Remote: `https://github.com/g-krish93/data_engineering` (origin). Deploy workflo
 
 ## 2. Current inventory (ground truth at commit time)
 
-### Lessons authored: 52 (Phase 0 complete; Phase 1 = 30/30; Phase 2 = 19/19)
+### Lessons authored: 75 (Phase 0 complete; Phase 1 = 30/30; Phase 2 = 19/19; Phase 3 = 23/23)
 
 | Module | Lessons | State |
 |---|---|---|
 | 0.1 dev environment | 0.1.1–0.1.3 | complete, browser-verified |
 | 1.1 Python fundamentals | 1.1.1–1.1.5 | complete, agent self-verified (tsc+oxlint) |
-| 1.2 Python for real programs | 1.2.1–1.2.6 | complete files; **QA pass advised** (see §4.2) |
+| 1.2 Python for real programs | 1.2.1–1.2.6 | complete; QA pass done (1 fix: 1.2.4 char count) |
 | 1.3 working with data | 1.3.1–1.3.5 | complete, agent-verified incl. live Open-Meteo call + snippet execution |
-| 1.4 SQL fundamentals | 1.4.1–1.4.5 | complete; 1.4.5 agent-verified (every snippet executed on real DuckDB 1.5.5); QA pass advised on 1.4.1–1.4.4 |
+| 1.4 SQL fundamentals | 1.4.1–1.4.5 | complete; QA pass done (clean; all snippets executed on real DuckDB 1.5.5) |
 | 1.5 SQL intermediate | 1.5.1–1.5.5 | complete, agent-verified (every query executed on real DuckDB) |
 | 1.6 CLI & automation | 1.6.1–1.6.4 | complete, agent self-verified |
 | 2.1 Postgres & relational engine | 2.1.1–2.1.4 | complete, agent-verified (SQL snippets executed) |
-| 2.2 indexes & performance | 2.2.1–2.2.4 | complete files; QA pass advised |
-| 2.3 OLTP/OLAP, row vs column | 2.3.1–2.3.4 | complete files; QA pass advised |
-| 2.4 dimensional modeling | 2.4.1–2.4.4 | complete files; QA pass advised |
+| 2.2 indexes & performance | 2.2.1–2.2.4 | complete; QA pass done (clean) |
+| 2.3 OLTP/OLAP, row vs column | 2.3.1–2.3.4 | complete; QA pass done (1 fix: 2.3.3 sorting/compression checkpoint) |
+| 2.4 dimensional modeling | 2.4.1–2.4.4 | complete; QA pass done (clean) |
 | 2.5 file formats | 2.5.1–2.5.3 | complete, agent-verified |
+| 3.1 Docker & Compose | 3.1.1–3.1.3 | complete, browser-verified |
+| 3.2 Ingestion patterns | 3.2.1–3.2.5 | complete; all DuckDB SQL executed on real DuckDB 1.5.5 |
+| 3.3 Data lake & MinIO | 3.3.1–3.3.3 | complete; all DuckDB SQL executed |
+| 3.4 Orchestration (Dagster) | 3.4.1–3.4.4 | complete; Python cells executed, browser-verified |
+| 3.5 Airflow translation | 3.5.1 | complete, browser-verified |
+| 3.6 dbt | 3.6.1–3.6.5 | complete; all 8 DuckDB SQL cells executed |
+| 3.7 Data quality & CI | 3.7.1–3.7.2 | complete; SQL + Python cells executed |
 
-All 48 Phase 1–2 files: `tsc -b` clean, structurally complete (Quiz/Lab/Tiered×3/InterviewAngle/
-KeyTakeaways/export default), unique correct `const ID`, registered in `src/lessons/index.ts`,
-flagged in the `AUTHORED` set in `src/curriculum.ts`.
+All Phase 1–3 lesson files: `tsc -b` + `vite build` + `oxlint` clean, structurally complete
+(Quiz/Lab/Tiered×3/InterviewAngle/KeyTakeaways/export default), unique correct `const ID`,
+registered in `src/lessons/index.ts`, flagged in the `AUTHORED` set in `src/curriculum.ts`. Every
+runnable DuckDB SQL / Python snippet across Phase 3 was executed on real DuckDB 1.5.5 / Python 3
+with outputs matching the prose; all lessons browser-verified (render, all three tiers, viz,
+zero console errors). Phase 3's QA pass (§4.2) on the orphaned Phase 1–2 modules is also done.
 
 ### App platform
 
@@ -59,6 +69,9 @@ flagged in the `AUTHORED` set in `src/curriculum.ts`.
   CollectionsViz (list-vs-dict race), RetryBackoffViz (jitter toggle), RowVsColumn3D (layout × query
   page-cost demo), BTreeViz (real order-4 insert/split + search), StarSchema3D (clickable dims),
   ParquetFileViz (pruning/pushdown I/O counter), BenchBars (animated comparison bars).
+  **Phase 3 additions:** ContainerLayers (Docker image layers + writable cap), PipelineDAG
+  (asset/model DAG, click a node for lineage), MedallionFlow (bronze/silver/gold zones),
+  WatermarkTimeline (watermark sweep, on-time vs late events). All props-driven, on /playground.
 - **Pages**: Home (3D map + tier picker + phase grid + progress export/import), PhasePage, LessonPage
   (tier switch, mark-done, prev/next), PortfolioPage, **/playground** (unlisted route: both engines +
   every viz — use it to smoke-test primitives).
@@ -132,14 +145,20 @@ belt-and-braces), (b) execute every CodeRunner snippet (python via any Python 3.
 - When the user finishes Phase 1 → write P1 retro notes if asked; finishes Phase 2 → **write P2
   NYC Taxi Warehouse SPEC.md + BUILD-GUIDE.md** from templates, informed by what they built in P1.
 
-### 4.4 Phase 3+ authoring (the next big arc)
+### 4.4 Phase 3 authoring — DONE (2026-07-22); Phase 4+ is the next arc
 
-Scope is already encoded in `src/curriculum.ts` (modules 3.1–3.7 with lesson titles) and the README
-roadmap. Recommended approach: same per-module agent pattern (§3). Before launching Phase 3 agents,
-build the viz primitives that phase needs (suggested: PipelineDAG viz for Dagster assets,
-MedallionFlow (bronze/silver/gold), WatermarkTimeline for incremental loads, ContainerLayers for
-Docker images; Kafka/LSM/Shuffle vizzes belong to phases 4–5). Also wire nothing new engine-wise —
-Phase 3 labs are Docker-heavy (MinIO, Dagster, dbt run on the user's machine).
+Phase 3 (23/23 lessons, modules 3.1–3.7) is authored, verified, and pushed, built with the
+per-module agent pattern (§3): four new viz primitives first (ContainerLayers, PipelineDAG,
+MedallionFlow, WatermarkTimeline — all on /playground), then one authoring agent per module,
+integrated centrally (registry + AUTHORED + glossary), with every runnable DuckDB SQL / Python
+snippet executed on real DuckDB 1.5.5 / Python 3 and every lesson browser-verified. No new engine
+was wired (Phase 3 labs run Docker/MinIO/Dagster/dbt on the user's machine). This batch stayed
+within account limits by staggering ≤4 concurrent agents.
+
+**Next (Phase 4+):** same pattern. Scope for phases 4–8 is in `src/curriculum.ts`. Phase 4 (Spark &
+Iceberg) will want new viz (suggested: ShuffleViz, PartitionSkew, an Iceberg snapshot/manifest viz);
+Kafka/LSM vizzes belong to phases 5/8. When the user *completes* a phase, write that phase's
+portfolio spec (P3 Local Lakehouse for Phase 3) from the templates — not before they reach it.
 
 ### 4.5 Known tech debt / gotchas (deliberate, documented)
 
