@@ -323,4 +323,24 @@ export const glossary: Record<string, GlossaryEntry> = {
     definition:
       'Collapse of scan throughput when a dataset is split across huge numbers of tiny files, because per-file fixed costs (listing, opens, footer reads, planning) dominate actual data reading.',
   },
+  subquery: {
+    term: 'Subquery',
+    definition:
+      'A SELECT query nested inside another statement. Its position sets its shape: scalar (one value, used like a literal), a set behind IN/EXISTS, or a derived table in FROM. The inner query is evaluated before the outer one can use its result.',
+  },
+  'correlated-subquery': {
+    term: 'Correlated subquery',
+    definition:
+      'A subquery that references a column from the outer query, so it is logically re-evaluated for every outer row (e.g. comparing each row to its own group average). Contrast with an uncorrelated subquery, which ignores the outer row and runs once; optimizers usually decorrelate correlated forms into joins.',
+  },
+  'derived-table': {
+    term: 'Derived table',
+    definition:
+      'A subquery used in the FROM clause as if it were a real table, requiring an alias. Lets you compute an intermediate result (such as per-group aggregates) and then filter or join against it in the same statement.',
+  },
+  'semi-join': {
+    term: 'Semi-join',
+    definition:
+      'A join that returns each row of one table where at least one match exists in another, without duplicating rows or adding the other table\'s columns. IN and EXISTS express it; unlike an inner join it never multiplies rows, making it the correct tool for existence tests.',
+  },
 }

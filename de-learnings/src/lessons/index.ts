@@ -29,7 +29,7 @@ export const lessonComponents: Record<string, LazyExoticComponent<ComponentType>
   '1.4.2': lazy(() => import('./phase-1/module-04/02-filtering-sorting-expressions')),
   '1.4.3': lazy(() => import('./phase-1/module-04/03-aggregation-group-by')),
   '1.4.4': lazy(() => import('./phase-1/module-04/04-joins-null-semantics')),
-  // 1.4.5 subqueries-and-case: NOT YET AUTHORED (agent died mid-run; see HANDOVER.md)
+  '1.4.5': lazy(() => import('./phase-1/module-04/05-subqueries-case')),
   '1.5.1': lazy(() => import('./phase-1/module-05/01-ctes-query-structure')),
   '1.5.2': lazy(() => import('./phase-1/module-05/02-window-functions-ranking')),
   '1.5.3': lazy(() => import('./phase-1/module-05/03-window-frames-rolling')),

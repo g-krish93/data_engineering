@@ -25,7 +25,7 @@ Remote: `https://github.com/g-krish93/data_engineering` (origin). Deploy workflo
 
 ## 2. Current inventory (ground truth at commit time)
 
-### Lessons authored: 51 (Phase 0 complete; Phase 1 = 29/30; Phase 2 = 19/19)
+### Lessons authored: 52 (Phase 0 complete; Phase 1 = 30/30; Phase 2 = 19/19)
 
 | Module | Lessons | State |
 |---|---|---|
@@ -33,7 +33,7 @@ Remote: `https://github.com/g-krish93/data_engineering` (origin). Deploy workflo
 | 1.1 Python fundamentals | 1.1.1–1.1.5 | complete, agent self-verified (tsc+oxlint) |
 | 1.2 Python for real programs | 1.2.1–1.2.6 | complete files; **QA pass advised** (see §4.2) |
 | 1.3 working with data | 1.3.1–1.3.5 | complete, agent-verified incl. live Open-Meteo call + snippet execution |
-| 1.4 SQL fundamentals | 1.4.1–1.4.4 | complete files; **1.4.5 MISSING** (see §4.1); QA pass advised |
+| 1.4 SQL fundamentals | 1.4.1–1.4.5 | complete; 1.4.5 agent-verified (every snippet executed on real DuckDB 1.5.5); QA pass advised on 1.4.1–1.4.4 |
 | 1.5 SQL intermediate | 1.5.1–1.5.5 | complete, agent-verified (every query executed on real DuckDB) |
 | 1.6 CLI & automation | 1.6.1–1.6.4 | complete, agent self-verified |
 | 2.1 Postgres & relational engine | 2.1.1–2.1.4 | complete, agent-verified (SQL snippets executed) |
@@ -95,11 +95,13 @@ batches (3–4 at a time) if account limits are tight.
 
 ## 4. UNFINISHED WORK (prioritized)
 
-### 4.1 Author lesson 1.4.5 — 'Subqueries and CASE' (the only missing lesson)
+### 4.1 Author lesson 1.4.5 — 'Subqueries and CASE' — DONE (2026-07-22)
 
-File: `de-learnings/src/lessons/phase-1/module-04/05-subqueries-case.tsx`, `const ID = '1.4.5'`.
-After writing: add to `lessonComponents` in `src/lessons/index.ts` and to `AUTHORED` in
-`src/curriculum.ts` (both have `1.4.5 pending` comments marking the spot). Original brief, verbatim:
+Authored at `de-learnings/src/lessons/phase-1/module-04/05-subqueries-case.tsx` (`ID = '1.4.5'`),
+registered in `index.ts`, flagged in `curriculum.ts`, +4 glossary terms (subquery,
+correlated-subquery, derived-table, semi-join). Build + oxlint clean; every SQL snippet executed on
+real DuckDB 1.5.5; browser render + all three tiers verified. Phase 1 is now 30/30. Original brief,
+kept for reference:
 
 > **05-subqueries-case.tsx** (ID '1.4.5', ~65 min)
 > - Concepts: scalar subqueries; IN (subquery); correlated vs uncorrelated; derived tables
