@@ -358,7 +358,7 @@ for codec in codecs:
               ),
             },
             {
-              title: 'Measure what sorting buys',
+              title: 'Measure what sorting buys — and what it costs',
               body: (
                 <>
                   <p>Create <code>sorted_test.py</code> — same data, same codec, sorted by <code>city</code> before writing:</p>
@@ -381,8 +381,13 @@ for name in ["orders_zstd.parquet", "orders_sorted_zstd.parquet"]:
               commands: [{ ps: 'uv run python sorted_test.py' }],
               checkpoint: (
                 <>
-                  The sorted file is smaller than the unsorted zstd file. (The gap here is modest because the generated measure columns are mostly
-                  incompressible arithmetic — on real business data with correlated columns it is routinely 2-5x.)
+                  Surprise: the sorted file is <em>bigger</em> — roughly 50 MB versus roughly 6 MB unsorted, about 8x larger. That is not a bug, it is
+                  the lesson. Sorting by <code>city</code> does collapse the <code>city</code> column into 50 long runs, but this table&apos;s other
+                  nineteen columns are sequential (<code>id</code>) or periodic (the <code>m00..m15</code> measures cycle every 997 values), so in their
+                  natural order they already delta- and RLE-compress almost to nothing. Reordering by city shatters that regularity, and the loss dwarfs
+                  the city column&apos;s gain. Sorting is a force multiplier only for columns whose repeats are otherwise <em>scattered</em> — here the
+                  natural order is already ideal. Keep the habit, not the number: measure before committing to a sort key. It rewards the sort column
+                  and anything correlated with it, and can penalize columns that were already ordered.
                 </>
               ),
             },
