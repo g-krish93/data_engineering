@@ -1,0 +1,14 @@
+# Run the built learning app locally with one command:
+#   docker compose up --build
+# then open http://localhost:8080
+#
+# This serves a production build via nginx. For active lesson development,
+# use `npm run dev` instead (per CLAUDE.md) — hot reload lives there.
+services:
+  de-learnings:
+    build: .
+    image: de-learnings
+    container_name: de-learnings
+    ports:
+      - "8080:80"
+    restart: unless-stopped
