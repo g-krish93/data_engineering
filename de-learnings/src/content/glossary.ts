@@ -323,4 +323,471 @@ export const glossary: Record<string, GlossaryEntry> = {
     definition:
       'Collapse of scan throughput when a dataset is split across huge numbers of tiny files, because per-file fixed costs (listing, opens, footer reads, planning) dominate actual data reading.',
   },
+  subquery: {
+    term: 'Subquery',
+    definition:
+      'A SELECT query nested inside another statement. Its position sets its shape: scalar (one value, used like a literal), a set behind IN/EXISTS, or a derived table in FROM. The inner query is evaluated before the outer one can use its result.',
+  },
+  'correlated-subquery': {
+    term: 'Correlated subquery',
+    definition:
+      'A subquery that references a column from the outer query, so it is logically re-evaluated for every outer row (e.g. comparing each row to its own group average). Contrast with an uncorrelated subquery, which ignores the outer row and runs once; optimizers usually decorrelate correlated forms into joins.',
+  },
+  'derived-table': {
+    term: 'Derived table',
+    definition:
+      'A subquery used in the FROM clause as if it were a real table, requiring an alias. Lets you compute an intermediate result (such as per-group aggregates) and then filter or join against it in the same statement.',
+  },
+  'semi-join': {
+    term: 'Semi-join',
+    definition:
+      'A join that returns each row of one table where at least one match exists in another, without duplicating rows or adding the other table\'s columns. IN and EXISTS express it; unlike an inner join it never multiplies rows, making it the correct tool for existence tests.',
+  },
+  'image-layer': {
+    term: 'Image layer',
+    definition:
+      'The read-only filesystem diff produced by a single image build step (the files it added, changed, or deleted). Layers are immutable and content-addressed by hash, so identical layers are stored once and shared across images and containers.',
+  },
+  'union-filesystem': {
+    term: 'Union filesystem',
+    definition:
+      'A filesystem (overlayfs on Linux) that merges a stack of layers into one coherent tree, with upper layers shadowing lower ones and whiteout markers recording deletions. It is how a container presents many read-only image layers plus its writable layer as a single directory tree.',
+  },
+  'base-image': {
+    term: 'Base image',
+    definition:
+      'The image named in a Dockerfile\'s FROM instruction — the bottom of the layer stack that everything else builds on (e.g. python:3.13-slim). Many images share one base, so its layers are downloaded and stored a single time.',
+  },
+  'copy-on-write': {
+    term: 'Copy-on-write',
+    definition:
+      'Sharing data until it is modified: a container reads files straight from the read-only image layers, but the first write to a file copies it up into the writable layer and edits the copy, leaving the underlying image untouched. Cheap to share, with a copy cost on first write.',
+  },
+  'container-registry': {
+    term: 'Container registry',
+    definition:
+      'A server that stores and serves container images (Docker Hub is the default public one; companies run private ones). docker pull downloads an image by registry/repository:tag; docker push publishes one. Layers are stored once per registry and deduplicated by digest.',
+  },
+  dockerfile: {
+    term: 'Dockerfile',
+    definition:
+      'A plain-text file of ordered instructions (FROM, COPY, RUN, CMD, …) that Docker executes top-to-bottom to build an image, one layer per instruction.',
+  },
+  buildkit: {
+    term: 'BuildKit',
+    definition:
+      'The modern Docker build engine that compiles a Dockerfile into a build DAG — content-addressed caching, parallel execution of independent stages, cache mounts, and pruning of unused work.',
+  },
+  'build-context': {
+    term: 'Build context',
+    definition:
+      'The directory tree sent to the Docker builder when a build starts; COPY and ADD can only reference files inside it, so a bloated context slows builds and can leak secrets into images.',
+  },
+  dockerignore: {
+    term: '.dockerignore',
+    definition:
+      'A file of glob patterns excluded from the build context before it is sent to the builder — like .gitignore, but for image builds. Keeps contexts small and secrets out.',
+  },
+  'multi-stage-build': {
+    term: 'Multi-stage build',
+    definition:
+      'A Dockerfile with several FROM stages where a slim final stage copies only the built artifacts from a heavier builder stage, discarding compilers and build tooling to ship a small, safer image.',
+  },
+  'non-root-user': {
+    term: 'Non-root user',
+    definition:
+      'Running a container\'s main process as an unprivileged USER rather than root, shrinking the blast radius if the process is compromised or escapes.',
+  },
+  'docker-compose': {
+    term: 'Docker Compose',
+    definition:
+      'A tool that runs a multi-container application declared in a YAML file (services, one network, volumes) with a single up/down command — the standard way to wire local multi-service stacks.',
+  },
+  'compose-service': {
+    term: 'Compose service',
+    definition:
+      'A single container definition within a docker-compose.yml file — its image (or build), ports, environment, volumes, and dependencies.',
+  },
+  'service-discovery': {
+    term: 'Service discovery',
+    definition:
+      'Compose\'s shared network plus embedded DNS resolves each service name to its container\'s current IP, so services reach each other by name (e.g. an app connects to host "db") instead of a hardcoded address.',
+  },
+  'named-volume': {
+    term: 'Named volume',
+    definition:
+      'A Docker-managed persistent volume referenced by name that lives outside any container\'s writable layer and survives container removal — where stateful data (a database\'s files) belongs.',
+  },
+  'bind-mount': {
+    term: 'Bind mount',
+    definition:
+      'A mount mapping a specific host directory into a container so host and container share files live — used to inject dev code or config, in contrast to a Docker-managed named volume.',
+  },
+  healthcheck: {
+    term: 'Healthcheck',
+    definition:
+      'A command Docker runs on a schedule to report whether a container is actually ready (exit 0 = healthy). Lets dependents wait for readiness via depends_on: condition: service_healthy, unlike plain depends_on which only waits for start.',
+  },
+  kubernetes: {
+    term: 'Kubernetes',
+    definition:
+      'A multi-host container orchestrator providing scheduling, self-healing rescheduling, rolling deploys, and autoscaling across a cluster of machines — the production step beyond single-host Compose.',
+  },
+  'batch-processing': {
+    term: 'Batch processing',
+    definition:
+      'Processing a complete, bounded chunk of data in one pass, usually on a schedule. High throughput, high latency — the classic ETL cadence.',
+  },
+  'micro-batch': {
+    term: 'Micro-batch',
+    definition:
+      'A stream sliced into a sequence of small bounded batches processed on a short interval — a tunable middle ground between batch and true streaming.',
+  },
+  'stream-processing': {
+    term: 'Stream processing',
+    definition:
+      'Processing each event as it arrives over unbounded data, for the lowest latency and the highest complexity.',
+  },
+  'bounded-data': {
+    term: 'Bounded data',
+    definition:
+      'A finite, complete dataset you can see in full before computing a result — the natural input to batch processing.',
+  },
+  'unbounded-data': {
+    term: 'Unbounded data',
+    definition:
+      'A never-ending stream with no end at which to compute a final answer, so aggregates must be computed over windows.',
+  },
+  latency: {
+    term: 'Latency',
+    definition:
+      'How stale a pipeline\'s output is — the delay between an event happening and its effect appearing downstream. Traded against throughput and cost.',
+  },
+  throughput: {
+    term: 'Throughput',
+    definition: 'The volume of records a pipeline processes per unit time.',
+  },
+  watermark: {
+    term: 'Watermark',
+    definition:
+      'A moving marker asserting "every event up to here has been seen" — the maximum high-water-mark value already processed. Incremental loads advance it each run; late data arrives behind it.',
+  },
+  'incremental-load': {
+    term: 'Incremental load',
+    definition:
+      'Loading only the rows changed since last time (cost scales with change volume, not table size), using a high-water-mark column plus an upsert.',
+  },
+  'high-water-mark': {
+    term: 'High-water mark',
+    definition:
+      'The source column that only increases as rows change (e.g. updated_at or a monotonic id), used to select the delta since the last load.',
+  },
+  upsert: {
+    term: 'Upsert',
+    definition:
+      'A write that updates a row when its key already exists and inserts it otherwise (MERGE, or INSERT ... ON CONFLICT DO UPDATE). Idempotent per key.',
+  },
+  backfill: {
+    term: 'Backfill',
+    definition:
+      'Reprocessing a past date range — to fix a bug, fill a gap, or apply new logic to history. Safe to repeat when each partition load is idempotent.',
+  },
+  'late-data': {
+    term: 'Late data',
+    definition:
+      'An event whose event-time is already behind the watermark when it arrives, so the window it belongs to may have closed. Handled by dropping, dead-lettering, or restating.',
+  },
+  'allowed-lateness': {
+    term: 'Allowed lateness',
+    definition:
+      'A grace window past the watermark during which a straggler event can still update a window\'s result before its state is discarded.',
+  },
+  'dead-letter': {
+    term: 'Dead letter',
+    definition:
+      'A side table or queue for records that cannot be processed (bad types, validation failures, poison messages), tagged with a reason so the main flow keeps moving.',
+  },
+  'poison-message': {
+    term: 'Poison message',
+    definition:
+      'A record that repeatedly fails processing (e.g. a deserialization or type error) and can stall a consumer if it is not routed to a dead-letter store.',
+  },
+  restatement: {
+    term: 'Restatement',
+    definition:
+      'A backfill that recomputes and republishes already-published results to fold in corrections or late-arriving data.',
+  },
+  'change-data-capture': {
+    term: 'Change data capture (CDC)',
+    definition:
+      'Capturing row-level inserts, updates, and deletes from a source database as a stream of change events — via the transaction log (log-based), polling a timestamp (query-based), or database triggers.',
+  },
+  'logical-decoding': {
+    term: 'Logical decoding',
+    definition:
+      'Translating a database\'s physical write-ahead-log entries back into logical row changes (operation plus before/after images) in commit order — the basis of log-based CDC.',
+  },
+  'replication-slot': {
+    term: 'Replication slot',
+    definition:
+      'A durable cursor in Postgres tracking a CDC consumer\'s position; it pins WAL until changes are acknowledged, so a stalled consumer can grow WAL without bound.',
+  },
+  tombstone: {
+    term: 'Tombstone',
+    definition:
+      'A delete marker in a change stream or compacted log (often a key with a null value) that signals removal and lets physical cleanup proceed.',
+  },
+  prefix: {
+    term: 'Prefix (object storage)',
+    definition:
+      'The leading portion of an object key up to a delimiter. Consoles render prefixes as "folders", but the namespace is actually flat — there are no real directories.',
+  },
+  'strong-consistency': {
+    term: 'Strong consistency',
+    definition:
+      'A read immediately after a write always returns the latest value. Modern S3 and MinIO guarantee it for object operations.',
+  },
+  'eventual-consistency': {
+    term: 'Eventual consistency',
+    definition:
+      'After a write, reads may briefly return stale data or miss the object before converging — S3\'s pre-2020 behavior, still a hazard in some distributed stores.',
+  },
+  minio: {
+    term: 'MinIO',
+    definition:
+      'An open-source, S3-compatible object store you can run locally (in Docker) — your data lake and S3 API without a cloud account, ideal for dev and CI parity.',
+  },
+  's3-api': {
+    term: 'S3 API',
+    definition:
+      'The HTTP REST interface (buckets and keys, PUT/GET/LIST, multipart upload, SigV4 auth) that S3 defines and compatible stores like MinIO implement.',
+  },
+  httpfs: {
+    term: 'httpfs',
+    definition:
+      'A DuckDB extension for reading and writing over HTTP and S3-compatible object stores via s3:// URLs.',
+  },
+  'medallion-architecture': {
+    term: 'Medallion architecture',
+    definition:
+      'A data-lake convention of bronze (raw), silver (cleaned/conformed), and gold (business marts) layers, each rebuilt from the one below so you can always replay from raw.',
+  },
+  'bronze-layer': {
+    term: 'Bronze layer',
+    definition: 'The raw, as-ingested, append-only copy of source data — the replayable source of truth in a medallion lake.',
+  },
+  'silver-layer': {
+    term: 'Silver layer',
+    definition: 'Cleaned, typed, deduplicated, conformed data — one row per real entity, built from bronze.',
+  },
+  'gold-layer': {
+    term: 'Gold layer',
+    definition: 'Business-level marts and aggregates shaped for the questions people actually ask, built from silver.',
+  },
+  'write-amplification': {
+    term: 'Write amplification',
+    definition:
+      'Storing or rewriting the same logical data multiple times (e.g. across bronze/silver/gold copies), multiplying storage and compute cost.',
+  },
+  'software-defined-asset': {
+    term: 'Software-defined asset',
+    definition:
+      'A persistent data object (a table or file) that Dagster manages, defined by the @asset function that produces it — the unit of an asset-centric orchestrator, as opposed to a task/op.',
+  },
+  materialization: {
+    term: 'Materialization',
+    definition:
+      'Computing a transformation\'s result and persisting it. In an orchestrator like Dagster, the recorded event of building an asset (logged with timestamp and metadata, forming its history). In dbt, the config for HOW a model\'s SELECT is persisted — view, table, incremental, or ephemeral.',
+  },
+  'data-lineage': {
+    term: 'Data lineage',
+    definition:
+      'The recorded graph of what each dataset is built from (upstream) and what depends on it (downstream) — used for root-cause and impact analysis.',
+  },
+  'freshness-policy': {
+    term: 'Freshness policy',
+    definition:
+      'A declared staleness bound on an asset ("no more than an hour old") from which the orchestrator derives when to run, instead of a hand-pinned schedule.',
+  },
+  'dagster-job': {
+    term: 'Job (Dagster)',
+    definition: 'A named, runnable selection of assets (or ops) that schedules and sensors launch.',
+  },
+  schedule: {
+    term: 'Schedule',
+    definition: 'A time-driven trigger that runs a job on a cron cadence, whether or not new data exists.',
+  },
+  sensor: {
+    term: 'Sensor',
+    definition: 'An event-driven trigger that polls a condition (a file landing, an asset materializing) and runs a job when it becomes true.',
+  },
+  'run-key': {
+    term: 'Run key',
+    definition:
+      'A string on a run request that the orchestrator deduplicates on, making triggering idempotent — no second run launches for a key that already ran.',
+  },
+  'partitioned-asset': {
+    term: 'Partitioned asset',
+    definition:
+      'A single logical asset divided along a key (commonly one partition per day) whose partitions are materialized and tracked independently.',
+  },
+  'dagster-resource': {
+    term: 'Resource (Dagster)',
+    definition:
+      'A pluggable external dependency (a database connection, an S3 client) the orchestrator constructs and injects into assets by parameter name — dependency injection, swappable per environment.',
+  },
+  airflow: {
+    term: 'Apache Airflow',
+    definition:
+      'The mature, ubiquitous open-source workflow orchestrator (from Airbnb, 2015; Apache since 2016). Task-centric and the de facto industry default.',
+  },
+  'airflow-dag': {
+    term: 'DAG (Airflow)',
+    definition:
+      'In Airflow, a Directed Acyclic Graph whose nodes are tasks (steps) and whose edges are dependencies you declare explicitly, plus a schedule.',
+  },
+  'airflow-operator': {
+    term: 'Operator (Airflow)',
+    definition:
+      'A reusable template for a task (PythonOperator, BashOperator, and hundreds more from provider packages); instantiating one creates a task node.',
+  },
+  'airflow-scheduler': {
+    term: 'Scheduler (Airflow)',
+    definition:
+      'The long-running Airflow process that parses DAG files and, from the clock and upstream task states, decides which task instances are ready to run.',
+  },
+  'airflow-executor': {
+    term: 'Executor (Airflow)',
+    definition:
+      'The pluggable strategy that actually runs ready task instances — LocalExecutor (subprocesses), or CeleryExecutor/KubernetesExecutor for distributed runs.',
+  },
+  'task-instance': {
+    term: 'Task instance',
+    definition:
+      'One Airflow task on one logical date, with its own state (queued, running, success, failed, up_for_retry) in the metadata database.',
+  },
+  'taskflow-api': {
+    term: 'TaskFlow API',
+    definition:
+      'The modern Airflow authoring style using @dag/@task decorators: dependencies are wired by calling task functions, and return values pass between tasks as XComs.',
+  },
+  xcom: {
+    term: 'XCom',
+    definition:
+      'Airflow\'s "cross-communication" mechanism for passing a small value between tasks via the metadata database — for row counts and paths, never large datasets.',
+  },
+  'data-quality': {
+    term: 'Data quality',
+    definition:
+      'The practice of asserting measurable properties of data — not just that the job ran. A check is a query returning rule-violating rows; zero rows means the rule holds.',
+  },
+  observability: {
+    term: 'Data observability',
+    definition:
+      'Continuous, out-of-band measurement of data metrics (row counts, null rates, freshness lag) with anomaly detection and alerting — it preserves delivery but detects problems after the fact, in contrast to a blocking test.',
+  },
+  'data-contract': {
+    term: 'Data contract',
+    definition:
+      'A machine-checkable, owned agreement listing a dataset\'s guaranteed invariants (which properties are blocked and versioned versus best-effort and monitored).',
+  },
+  freshness: {
+    term: 'Freshness',
+    definition:
+      'The timeliness dimension of data quality — how far behind "now" the newest accepted row is. It fails when the lag exceeds an SLA, even though every value is valid.',
+  },
+  sla: {
+    term: 'SLA',
+    definition:
+      'Service-level agreement — the agreed limit a dataset must meet (e.g. maximum staleness, or a delivery deadline).',
+  },
+  quarantine: {
+    term: 'Quarantine',
+    definition:
+      'Routing rule-violating rows to a dead-letter table so clean rows keep flowing — partial delivery now, replay the quarantined rows after a fix.',
+  },
+  'continuous-integration': {
+    term: 'Continuous integration (CI)',
+    definition:
+      'Automatically building and testing every change against the shared codebase before merge, in a clean reproducible environment — for data, running dbt build + tests on each pull request.',
+  },
+  'branch-protection': {
+    term: 'Branch protection',
+    definition: 'A repository rule requiring a CI check to pass before a pull request can merge to a protected branch like main.',
+  },
+  'slim-ci': {
+    term: 'Slim CI',
+    definition:
+      'Building only the changed models and their downstream dependents (dbt state:modified+) against a saved manifest, so CI time scales with the change rather than the whole project.',
+  },
+  defer: {
+    term: 'Defer (dbt)',
+    definition:
+      'dbt --defer references unchanged upstream models from a production environment instead of rebuilding them in CI — the other half of slim CI.',
+  },
+  'ephemeral-environment': {
+    term: 'Ephemeral environment',
+    definition:
+      'A throwaway, per-run schema/warehouse (or DuckDB file) created and dropped for each CI run, so tests are isolated and leave no residue.',
+  },
+  sqlfluff: {
+    term: 'SQLFluff',
+    definition: 'A SQL linter that parses SQL and flags style and rule violations, exiting non-zero on a problem — the SQL analogue of a code linter, runnable in CI.',
+  },
+  dbt: {
+    term: 'dbt',
+    definition:
+      'A SQL-first transformation framework (the T in ELT) where each model is a SELECT file. It compiles Jinja-templated SQL, builds a dependency DAG from ref(), and runs models in order against a warehouse.',
+  },
+  'dbt-model': {
+    term: 'dbt model',
+    definition: 'One .sql file containing a single SELECT; dbt wraps it in whatever DDL its materialization needs (a view, a table, an incremental merge).',
+  },
+  'incremental-model': {
+    term: 'Incremental model',
+    definition:
+      'A dbt materialization that builds the model once, then on later runs merges only new or changed rows via a unique_key and an is_incremental() filter — the dbt form of an incremental load.',
+  },
+  'ephemeral-model': {
+    term: 'Ephemeral model',
+    definition: 'A dbt model that produces no database object; dbt inlines its SELECT as a CTE into each model that references it.',
+  },
+  'dbt-source': {
+    term: 'dbt source',
+    definition: 'A YAML declaration of a raw input table, referenced in models with source(); it can carry schema tests and freshness monitoring.',
+  },
+  'schema-test': {
+    term: 'Schema test',
+    definition: 'A generic, reusable dbt test attached to a column in YAML (unique, not_null, accepted_values, relationships) — a data-quality assertion as configuration.',
+  },
+  'singular-test': {
+    term: 'Singular test',
+    definition: 'A one-off dbt test written as a .sql file that hand-writes a "return the violating rows" query; it passes when the query returns zero rows.',
+  },
+  'dbt-snapshot': {
+    term: 'dbt snapshot',
+    definition: 'dbt\'s built-in SCD2 materialization: run repeatedly, it captures how a source row changes over time into validity-windowed history rows.',
+  },
+  scd2: {
+    term: 'SCD Type 2',
+    definition:
+      'Slowly Changing Dimension Type 2 — preserve history by expiring the old version of a row (setting its valid_to) and inserting a new current version, rather than overwriting. Taught in lesson 2.4.3; automated by dbt snapshots.',
+  },
+  'staging-model': {
+    term: 'Staging model',
+    definition: 'The stg_ layer in a dbt project: 1:1 with a source, light cleaning/renaming/typing only, and the only layer that references sources directly.',
+  },
+  'intermediate-model': {
+    term: 'Intermediate model',
+    definition: 'The int_ layer holding reusable joins and business logic shared by several marts — often materialized ephemerally.',
+  },
+  mart: {
+    term: 'Mart',
+    definition: 'The business-facing fct_/dim_ layer of a dbt project — Kimball facts and dimensions at an explicit grain, built from staging and intermediate models.',
+  },
+  medallion: {
+    term: 'Medallion',
+    definition:
+      'Shorthand for the medallion architecture: the bronze (raw) / silver (cleaned) / gold (business-ready) layering of a data lake, each layer rebuilt from the one below.',
+  },
 }

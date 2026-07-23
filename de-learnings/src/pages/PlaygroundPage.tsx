@@ -6,6 +6,10 @@ import { StarSchema3D } from '../viz/StarSchema3D'
 import { ParquetFileViz } from '../viz/ParquetFileViz'
 import { RetryBackoffViz } from '../viz/RetryBackoffViz'
 import { BenchBars } from '../viz/BenchBars'
+import { ContainerLayers } from '../viz/ContainerLayers'
+import { PipelineDAG } from '../viz/PipelineDAG'
+import { MedallionFlow } from '../viz/MedallionFlow'
+import { WatermarkTimeline } from '../viz/WatermarkTimeline'
 
 /** Unlisted sandbox: run Python and SQL in the browser, poke every viz primitive. */
 export default function PlaygroundPage() {
@@ -61,6 +65,11 @@ ORDER BY avg_amount DESC`}
         ]}
         betterIs="lower"
       />
+      <h2 className="mt-8 text-lg font-semibold">Phase 3 primitives</h2>
+      <ContainerLayers />
+      <PipelineDAG />
+      <MedallionFlow />
+      <WatermarkTimeline />
     </main>
   )
 }
